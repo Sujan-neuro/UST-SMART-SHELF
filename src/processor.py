@@ -1,13 +1,14 @@
 from datetime import datetime
-from utils import cosine_distance
-from config import CONFIDENCE_THRESHOLD, EMBEDDING_THRESHOLD
+from utils import cosine_distance, LimitedDict, DailyIndex
+from config import CONFIDENCE_THRESHOLD, EMBEDDING_THRESHOLD, MAX_EMBEDDING_TO_MATCH
 from PIL import Image
 
 class Processor:
     def __init__(self, detector, analyzer):
         self.detector = detector
         self.analyzer = analyzer
-        self.embeddings = {}
+        self.embeddings = LimitedDict(max_size = MAX_EMBEDDING_TO_MATCH)
+        self.daily_index = DailyIndex()
 
     def process_frame(self, frame):
         nearest_person_bbox = self.detector.detect_faces(frame, confidence = CONFIDENCE_THRESHOLD)
@@ -52,7 +53,8 @@ class Processor:
                     break
 
             if not matched:
-                new_id = (f"{datetime.now().strftime('%Y%m%d')}_{len(self.embeddings) + 1}") # Replace it by today
+                index = self.daily_index.get_index()
+                new_id = (f"{today.strftime('%Y%m%d')}_{index}")
                 self.embeddings[new_id] = embedding
                 output ={
                         "visitorId": new_id,
