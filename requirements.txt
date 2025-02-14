@@ -14,6 +14,7 @@ charset-normalizer==3.4.0
 click==8.1.7
 colorama==0.4.6
 comm==0.2.2
+confluent-kafka==2.8.0
 contourpy==1.3.0
 cryptography==43.0.1
 cycler==0.12.1
@@ -44,6 +45,7 @@ jiter==0.7.0
 joblib==1.4.2
 jupyter_client==8.6.3
 jupyter_core==5.7.2
+kafka-python==2.0.3
 kiwisolver==1.4.7
 lazy-model==0.2.0
 loguru==0.7.2

@@ -4,7 +4,7 @@ from analysis import Analyzer
 from processor import Processor
 from config import PROCESS_INTERVAL_SEC, PEOPLE_DETECTOR , TRACKING_DURATION_SEC
 from utils import IDTracker, CameraFPS
-
+from kafka_producer import send_to_kafka
 
 def main(output_location):
     detector = Detector(PEOPLE_DETECTOR)
@@ -57,6 +57,7 @@ def main(output_location):
             api_person_id = tracker.check_for_api(person_id)
             if api_person_id:
                 print(result)
+                send_to_kafka(result)
         frame_no += 1
         # (Optional) Show the camera feed in a window
         cv2.imshow('Webcam Feed', frame)
