@@ -1,7 +1,30 @@
 from datetime import datetime
-from utils import cosine_distance, LimitedDict, DailyIndex
-from config import CONFIDENCE_THRESHOLD, EMBEDDING_THRESHOLD, MAX_EMBEDDING_TO_MATCH
 from PIL import Image
+from torchvision import transforms
+
+from utils import (cosine_distance, 
+                   LimitedDict, 
+                   DailyIndex
+                   )
+from config import (CONFIDENCE_THRESHOLD, 
+                    EMBEDDING_THRESHOLD, 
+                    MAX_EMBEDDING_TO_MATCH
+                    )
+
+# Image preprocessing class
+class ImagePreprocessor:
+    def __init__(self):
+        self.transform = transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        ])
+
+    def preprocess(self, image):
+        image_tensor = self.transform(image).unsqueeze(0)  # Add batch dimension
+        return image_tensor
+
+
 
 class Processor:
     def __init__(self, detector, analyzer):

@@ -1,28 +1,35 @@
-from ultralytics import YOLO
-    
-class Detector:
-    def __init__(self, model_path):
-        self.model = YOLO(model_path)
-        self.previous_person_id = None  # To track the currently identified person
+from deepface import DeepFace
 
-    def detect_faces(self, frame, confidence = 0.8):
+# Detect faces using Deepface    
+class DeepFaceDetector:
         """
-        Detect faces using YOLO.
+        Detects and extracts faces using DeepFace.
+        Returns the bounding box (x1, y1, x2, y2) of the face with highest confidence.
         """
-        results = self.model.predict(source = frame, conf = confidence, verbose = False)
-        boxes, max_area, nearest_person_bbox = [], 0, None
 
-        for result in results:
-            for bbox, conf, cls_id in zip(result.boxes.xyxy, result.boxes.conf, result.boxes.cls):
-                if cls_id == 0 and conf > confidence:  # Class ID 0 for person
-                    bbox_np = bbox.cpu().numpy()
-                    boxes.append(bbox_np)
+        def detect_faces(self, frame, confidence = 0.5):
+            try:
+                detected_faces = DeepFace.extract_faces(frame, detector_backend="opencv")  # You can use mtcnn, dlib, etc.
+                if not detected_faces:
+                    return None  # No faces detected
+                
+                # Filter faces by confidence level
+                valid_faces = [face for face in detected_faces if face.get("confidence", 0) >= confidence]
 
-                    # Calculate the area of the bounding box
-                    area = (bbox_np[2] - bbox_np[0]) * (bbox_np[3] - bbox_np[1])
-                    if area > max_area:  # Identify the nearest person based on the largest bounding box
-                        max_area = area
-                        nearest_person_bbox = bbox_np
+                if not valid_faces:
+                    return None  # No faces meet the confidence threshold
+                
+                # Select the largest face (assumed nearest) among valid faces
+                nearest_face = max(valid_faces, key=lambda x: x["facial_area"]["w"] * x["facial_area"]["h"])
 
-        # If no person is detected, return empty lists
-        return nearest_person_bbox
+                # Get bounding box coordinates
+                x1 = nearest_face["facial_area"]["x"]
+                y1 = nearest_face["facial_area"]["y"]
+                width = nearest_face["facial_area"]["w"]
+                height = nearest_face["facial_area"]["h"]
+                x2 = x1 + width
+                y2 = y1 + height
+
+                return x1, y1, x2, y2
+            except Exception as e:
+                return None
