@@ -1,5 +1,5 @@
 from sklearn.metrics.pairwise import cosine_similarity
-import time, datetime, cv2
+import time, datetime
 from collections import OrderedDict
 
 def cosine_distance(vec1, vec2):
@@ -57,24 +57,11 @@ class DailyIndex:
 
         return self.index
     
-class CameraFPS:
-    def __init__(self, cap, duration = 2):
-        self.cap = cap
-        self.duration = duration  # Time to measure FPS
-        self.fps_counter = 0
-        self.start_time = time.time()
+# Age destandardization class
+class DestandardizeAge:
+    def __init__(self):
+        self.mean_age = 30.43709706303725
+        self.std_age = 16.547361149730804
 
-    def calculate_fps(self):
-        """Capture frames and calculate the average FPS over the duration."""
-        start_time = time.time()
-        
-        while time.time() - start_time < self.duration:
-            ret, _ = self.cap.read()
-            if not ret:
-                break
-            self.fps_counter += 1
-        
-        elapsed_time = time.time() - start_time
-        avg_fps = self.fps_counter / elapsed_time if elapsed_time > 0 else 0
-        
-        return int(avg_fps)
+    def destandardize_age(self, standardized_age):
+        return standardized_age * self.std_age + self.mean_age
