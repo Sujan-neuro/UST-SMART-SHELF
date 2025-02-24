@@ -1,13 +1,14 @@
 import cv2, json, time
-from detection import Detector
+from detection import DeepFaceDetector
 from analysis import Analyzer
 from processor import Processor
-from config import PROCESS_INTERVAL_SEC, PEOPLE_DETECTOR , TRACKING_DURATION_SEC
-from utils import IDTracker, CameraFPS
+from config import PROCESS_INTERVAL_SEC , TRACKING_DURATION_SEC
+from utils import IDTracker
 from kafka_producer import send_to_kafka
 
+
 def main(output_location):
-    detector = Detector(PEOPLE_DETECTOR)
+    detector = DeepFaceDetector () ## Added newly
     analyzer = Analyzer()
     processor = Processor(detector, analyzer)
     tracker = IDTracker(tracking_duration_sec = TRACKING_DURATION_SEC)
@@ -21,13 +22,6 @@ def main(output_location):
         print("Could not open webcam.")
         return
     
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    # Fallback if camera FPS cannot be determined
-    if fps == 0:
-        camera_fps = CameraFPS(cap, duration = 2)
-        fps = camera_fps.calculate_fps()
-        print(f"Video FPS is {fps}")
-    frame_no = 0
     while True:
         ret, frame = cap.read()
         if not ret:
@@ -38,7 +32,7 @@ def main(output_location):
         bbox_coordinate, result = processor.process_frame(frame)
         if result:
             current_time = time.time()
-            if current_time -last_save_time > PROCESS_INTERVAL_SEC:
+            if current_time - last_save_time > PROCESS_INTERVAL_SEC:
                 # Log result to the file in JSON Lines format only
                 with open(output_location, "a") as f:
                     f.write(json.dumps(result) + "\n")
@@ -58,7 +52,6 @@ def main(output_location):
             if api_person_id:
                 print(result)
                 send_to_kafka(result)
-        frame_no += 1
         # (Optional) Show the camera feed in a window
         cv2.imshow('Webcam Feed', frame)
         # Press 'q' to exit
