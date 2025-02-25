@@ -1,5 +1,6 @@
 import json
 from kafka import KafkaProducer
+from config import TOPICS
  
 # Create a producer with JSON serializer
 producer = KafkaProducer(
@@ -9,7 +10,7 @@ producer = KafkaProducer(
 
 # Sending JSON data to Kafka
 def send_to_kafka(data):
-    for topic in  ['lenovo_event', 'retailmedia', 'malaysia_event', 'footprints_lab', 'nrf_singapore']:
+    for topic in  TOPICS:
         producer.send(topic, value=data)
         print(f"Produced data to topic: {topic}")
     producer.flush()
