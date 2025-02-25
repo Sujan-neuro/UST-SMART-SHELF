@@ -67,7 +67,8 @@ class Processor:
                             "primaryClothingColor": "",
                             "secondaryClothingColor": "",
                             "inStoreCoordinates":STORE_LOCATION,
-                            "eyesFocus": ""
+                            "eyesFocus": "",
+                            "type": "store"
                             }
                     break
 
@@ -88,7 +89,8 @@ class Processor:
                         "primaryClothingColor": "",
                         "secondaryClothingColor": "",
                         "inStoreCoordinates":STORE_LOCATION,
-                        "eyesFocus": ""
+                        "eyesFocus": "",
+                        "type": "store"
                         }
 
         return nearest_person_bbox, output
