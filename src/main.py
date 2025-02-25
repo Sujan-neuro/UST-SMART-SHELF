@@ -43,6 +43,12 @@ def main(output_location):
             predicted_gender = result.get("gender", "Unknown")
             x1, y1, x2, y2 = map(int, bbox_coordinate)
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 4)
+            if predicted_age < 20:
+                predicted_age = "below 20"
+            elif predicted_age > 60:
+                predicted_age = "above 60"
+            else:
+                predicted_age = f"{predicted_age-5}-{predicted_age+5}"
             text = f"Age:{predicted_age} || Gender:{predicted_gender}"  # Sample label
             cv2.putText(frame, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 3, cv2.LINE_AA)
 
