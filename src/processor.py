@@ -8,7 +8,9 @@ from utils import (cosine_distance,
                    )
 from config import (CONFIDENCE_THRESHOLD, 
                     EMBEDDING_THRESHOLD, 
-                    MAX_EMBEDDING_TO_MATCH
+                    MAX_EMBEDDING_TO_MATCH,
+                    LOCATION_ID,
+                    STORE_LOCATION
                     )
 
 # Image preprocessing class
@@ -56,7 +58,7 @@ class Processor:
                             "visitorId": visitor_id,
                             "age": age,
                             "gender": gender,
-                            "locationId": "Will provide",
+                            "locationId": LOCATION_ID,
                             "visitDate": today.strftime("%Y-%m-%d"),
                             "visitTime": today.strftime("%H:%M:%S"),
                             "mood": "",
@@ -64,13 +66,7 @@ class Processor:
                             "race": "",
                             "primaryClothingColor": "",
                             "secondaryClothingColor": "",
-                            "inStoreCoordinates":
-                            {
-                                "lat": "Will provide",
-                                "lng": "Will provide",
-                                "x": ["Will provide"],
-                                "y": ["Will provide"]
-                            },
+                            "inStoreCoordinates":STORE_LOCATION,
                             "eyesFocus": ""
                             }
                     break
@@ -83,7 +79,7 @@ class Processor:
                         "visitorId": new_id,
                         "age": age,
                         "gender": gender,
-                        "locationId": "Will provide",
+                        "locationId": LOCATION_ID,
                         "visitDate": today.strftime("%Y-%m-%d"),
                         "visitTime": today.strftime("%H:%M:%S"),
                         "mood": "",
@@ -91,13 +87,7 @@ class Processor:
                         "race": "",
                         "primaryClothingColor": "",
                         "secondaryClothingColor": "",
-                        "inStoreCoordinates":
-                        {
-                            "lat": "Will provide",
-                            "lng": "Will provide",
-                            "x": ["Will provide"],
-                            "y": ["Will provide"]
-                        },
+                        "inStoreCoordinates":STORE_LOCATION,
                         "eyesFocus": ""
                         }
 
