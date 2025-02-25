@@ -63,12 +63,6 @@ class Analyzer:
         inputs = self.age_preprocessor.preprocess(image)
         age_output = self.age_model.predict(inputs)
         age = round(self.destandardizer.destandardize_age(age_output[0][0]))
-        if age < 20:
-            age = "below 20"
-        elif age > 60:
-            age = "above 60"
-        else:
-            age = f"{age-5}-{age+5}"
 
         # Gender prediction
         inputs = self.gender_preprocessor(image, return_tensors = "pt")
