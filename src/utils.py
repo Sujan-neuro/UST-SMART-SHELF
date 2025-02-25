@@ -1,6 +1,7 @@
 from sklearn.metrics.pairwise import cosine_similarity
 import time, datetime
 from collections import OrderedDict
+import geocoder
 
 def cosine_distance(vec1, vec2):
     return 1 - cosine_similarity([vec1], [vec2])[0][0]
@@ -65,3 +66,28 @@ class DestandardizeAge:
 
     def destandardize_age(self, standardized_age):
         return standardized_age * self.std_age + self.mean_age
+    
+def get_current_location():
+    location_data = {
+        "lat": '',
+        "lng": '',
+        "x": [''],
+        "y": ['']
+        }
+    try:
+        g = geocoder.ip('me')  # Get current location based on IP
+        if g.latlng:
+            lat, lng = g.latlng
+            x = ['']  
+            y = [''] 
+            location_data = {
+                "lat": str(lat),
+                "lng": str(lng),
+                "x": x,
+                "y": y
+            }
+            return location_data
+        else:
+            return location_data
+    except:
+        return location_data
