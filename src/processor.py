@@ -1,6 +1,6 @@
 from datetime import datetime
 from utils import cosine_distance, LimitedDict, DailyIndex
-from config import CONFIDENCE_THRESHOLD, EMBEDDING_THRESHOLD, MAX_EMBEDDING_TO_MATCH
+from config import CONFIDENCE_THRESHOLD, EMBEDDING_THRESHOLD, MAX_EMBEDDING_TO_MATCH, LOCATION_ID
 from PIL import Image
 
 class Processor:
@@ -33,7 +33,7 @@ class Processor:
                             "visitorId": visitor_id,
                             "age": age,
                             "gender": gender,
-                            "locationId": "Will provide",
+                            "locationId": LOCATION_ID,
                             "visitDate": today.strftime("%Y-%m-%d"),
                             "visitTime": today.strftime("%H:%M:%S"),
                             "mood": "",
@@ -43,10 +43,10 @@ class Processor:
                             "secondaryClothingColor": "",
                             "inStoreCoordinates":
                             {
-                                "lat": "Will provide",
-                                "lng": "Will provide",
-                                "x": ["Will provide"],
-                                "y": ["Will provide"]
+                                "lat": "",
+                                "lng": "",
+                                "x": [""],
+                                "y": [""]
                             },
                             "eyesFocus": ""
                             }
@@ -60,7 +60,7 @@ class Processor:
                         "visitorId": new_id,
                         "age": age,
                         "gender": gender,
-                        "locationId": "Will provide",
+                        "locationId": LOCATION_ID,
                         "visitDate": today.strftime("%Y-%m-%d"),
                         "visitTime": today.strftime("%H:%M:%S"),
                         "mood": "",
@@ -70,10 +70,10 @@ class Processor:
                         "secondaryClothingColor": "",
                         "inStoreCoordinates":
                         {
-                            "lat": "Will provide",
-                            "lng": "Will provide",
-                            "x": ["Will provide"],
-                            "y": ["Will provide"]
+                            "lat": "",
+                            "lng": "",
+                            "x": [""],
+                            "y": [""]
                         },
                         "eyesFocus": ""
                         }
