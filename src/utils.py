@@ -61,8 +61,8 @@ class DailyIndex:
 # Age destandardization class
 class DestandardizeAge:
     def __init__(self):
-        self.mean_age = 30.43709706303725
-        self.std_age = 16.547361149730804
+        self.mean_age = 31.11096921925228
+        self.std_age = 17.220405909006107
 
     def destandardize_age(self, standardized_age):
         return standardized_age * self.std_age + self.mean_age
