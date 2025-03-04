@@ -1,6 +1,7 @@
 from utils import get_current_location
 
-AGE_DETECTOR_WEIGHTS = "./src/resnet50_regression.pth"
+AGE_DETECTOR_WEIGHTS = "./src/resnet50_regression5.pth"
+GENDER_DETECTOR_WEIGHTS = "./src/resnet50_classification.pth"
 GENDER_DETECTOR = "rizvandwiki/gender-classification"
 CONFIDENCE_THRESHOLD = 0.8
 EMBEDDING_THRESHOLD = 0.18
