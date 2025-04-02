@@ -4,7 +4,7 @@ from collections import OrderedDict
 import geocoder
 import cv2
 
-def list_available_cameras(max_tested = 5):
+def list_available_cameras(max_tested=5):
     available_cameras = []
     for index in range(max_tested):
         cap = cv2.VideoCapture(index)
@@ -12,6 +12,8 @@ def list_available_cameras(max_tested = 5):
             available_cameras.append(index)
             cap.release()
     return available_cameras
+
+print(list_available_cameras(10))
 
 
 def cosine_distance(vec1, vec2):

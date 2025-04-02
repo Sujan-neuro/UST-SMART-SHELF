@@ -141,11 +141,11 @@ if st.session_state.run_loop:
                 print(result)
                 # send_to_kafka(result)
                 ################################## Only for AWS event ###########################
-                if face_processor.identify_age or face_processor.identify_gender:
-                    topic = "aws_lab_no_detection"
-                    send_to_kafka(result, topics=[topic])
-                if face_processor.identify_age and face_processor.identify_gender:
+                if (identify_age_option and identify_gender_option):
                     topic = "aws_lab_default"
+                    send_to_kafka(result, topics=[topic])
+                if (not identify_age_option) and (not identify_gender_option):
+                    topic = "aws_lab_no_detection"
                     send_to_kafka(result, topics=[topic])
                 #################################################################################
 
