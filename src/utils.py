@@ -2,9 +2,23 @@ from sklearn.metrics.pairwise import cosine_similarity
 import time, datetime
 from collections import OrderedDict
 import geocoder
+import cv2
+
+def list_available_cameras(max_tested=5):
+    available_cameras = []
+    for index in range(max_tested):
+        cap = cv2.VideoCapture(index)
+        if cap.isOpened():
+            available_cameras.append(index)
+            cap.release()
+    return available_cameras
+
+print(list_available_cameras(10))
+
 
 def cosine_distance(vec1, vec2):
     return 1 - cosine_similarity([vec1], [vec2])[0][0]
+
 
 class IDTracker:
     def __init__(self, tracking_duration_sec = 3):

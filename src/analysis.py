@@ -5,7 +5,7 @@ from utils import DestandardizeAge
 from torchvision import transforms, models
 from config import (GENDER_DETECTOR, 
                     AGE_DETECTOR_WEIGHTS,
-                    GENDER_DETECTOR_WEIGHTS
+                    # GENDER_DETECTOR_WEIGHTS
 )
 from transformers import (
     AutoImageProcessor,
@@ -77,15 +77,18 @@ class ResNet50Classifier:
 
 
 class Analyzer:
-    def __init__(self):
-        self.preprocessor = ImagePreprocessor()
+    def __init__(self, identify_age = False, identify_gender = False):
+        self.identify_age = identify_age
+        self.identify_gender = identify_gender
+        if identify_age:
+            self.preprocessor = ImagePreprocessor()
+            self.age_model = ResNet50Regressor(AGE_DETECTOR_WEIGHTS)
 
-        self.age_model = ResNet50Regressor(AGE_DETECTOR_WEIGHTS)
-
-        # self.gender_preprocessor = AutoImageProcessor.from_pretrained(GENDER_DETECTOR, use_fast = True)
-        # self.gender_model = AutoModelForImageClassification.from_pretrained(GENDER_DETECTOR)
-
-        self.gender_model = ResNet50Classifier(GENDER_DETECTOR_WEIGHTS)
+        if identify_gender:
+            self.gender_preprocessor = AutoImageProcessor.from_pretrained(GENDER_DETECTOR, use_fast = True)
+            self.gender_model = AutoModelForImageClassification.from_pretrained(GENDER_DETECTOR)
+            # self.preprocessor = ImagePreprocessor()
+            # self.gender_model = ResNet50Classifier(GENDER_DETECTOR_WEIGHTS)
 
         resnet = models.resnet50(weights = models.ResNet50_Weights.IMAGENET1K_V1)
         self.embedding_model = torch.nn.Sequential(*list(resnet.children())[:-1])  # Remove FC layer
@@ -96,18 +99,23 @@ class Analyzer:
         """
         Predict age and gender for a given image.
         """
-        inputs = self.preprocessor.preprocess(image)
+        age = 'Neutral'
+        gender = 'Neutral'
 
-        age_output = self.age_model.predict(inputs)
-        age = round(self.destandardizer.destandardize_age(age_output[0][0]))
+        if self.identify_age:
+            inputs = self.preprocessor.preprocess(image)
+
+            age_output = self.age_model.predict(inputs)
+            age = round(self.destandardizer.destandardize_age(age_output[0][0]))
 
         # Gender prediction
-        # inputs = self.gender_preprocessor(image, return_tensors = "pt")
-        # gender_output = self.gender_model(**inputs)
-        # gender = ["Female", "Male"][gender_output.logits.argmax(1).item()]
+        if self.identify_gender:
+            inputs = self.gender_preprocessor(image, return_tensors = "pt")
+            gender_output = self.gender_model(**inputs)
+            gender = ["Female", "Male"][gender_output.logits.argmax(1).item()]
 
-        gender_output = self.gender_model.predict(inputs)
-        gender = ["Male", "Female"][1 if gender_output[0][0] > 0.5 else 0]
+            # gender_output = self.gender_model.predict(inputs)
+            # gender = ["Male", "Female"][1 if gender_output[0][0] > 0.5 else 0]
         return age, gender
 
     def get_embedding(self, image):

@@ -9,10 +9,8 @@ producer = KafkaProducer(
 )
 
 # Sending JSON data to Kafka
-def send_to_kafka(data):
-    for topic in  TOPICS:
+def send_to_kafka(data, topics = TOPICS):
+    for topic in  topics:
         producer.send(topic, value=data)
         print(f"Produced data to topic: {topic}")
     producer.flush()
-
-    
