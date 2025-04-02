@@ -6,8 +6,7 @@ from utils import (cosine_distance,
                    LimitedDict, 
                    DailyIndex
                    )
-from config import (CONFIDENCE_THRESHOLD, 
-                    EMBEDDING_THRESHOLD, 
+from config import (EMBEDDING_THRESHOLD, 
                     MAX_EMBEDDING_TO_MATCH,
                     LOCATION_ID,
                     STORE_LOCATION
@@ -36,7 +35,7 @@ class Processor:
         self.daily_index = DailyIndex()
 
     def process_frame(self, frame):
-        nearest_person_bbox = self.detector.detect_faces(frame, confidence = CONFIDENCE_THRESHOLD)
+        nearest_person_bbox = self.detector.detect_faces(frame)
         today = datetime.now()
         output = False
         if nearest_person_bbox is not None:
