@@ -13,8 +13,6 @@ def list_available_cameras(max_tested=5):
             cap.release()
     return available_cameras
 
-print(list_available_cameras(10))
-
 
 def cosine_distance(vec1, vec2):
     return 1 - cosine_similarity([vec1], [vec2])[0][0]
@@ -72,6 +70,7 @@ class DailyIndex:
 
         return self.index
     
+    
 # Age destandardization class
 class DestandardizeAge:
     def __init__(self):
@@ -80,6 +79,7 @@ class DestandardizeAge:
 
     def destandardize_age(self, standardized_age):
         return standardized_age * self.std_age + self.mean_age
+    
     
 def get_current_location():
     location_data = {
