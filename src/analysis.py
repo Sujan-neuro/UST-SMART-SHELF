@@ -99,8 +99,8 @@ class Analyzer:
         """
         Predict age and gender for a given image.
         """
-        age = 'Neutral'
-        gender = 'Neutral'
+        age = 0 # Default
+        gender = 'Neutral' # Default
 
         if self.identify_age:
             inputs = self.preprocessor.preprocess(image)

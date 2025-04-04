@@ -77,7 +77,7 @@ class FaceProcessor:
                         self.last_save_time = current_time
 
                 # Display the results on the frame
-                predicted_age = result.get("age", "Neutral")
+                predicted_age = result.get("age", 0)
                 predicted_gender = result.get("gender", "Neutral")
                 x1, y1, x2, y2 = map(int, bbox_coordinate)
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 4)
@@ -90,7 +90,7 @@ class FaceProcessor:
                     else:
                         predicted_age = f"{predicted_age-5}-{predicted_age+5}"
                 except Exception:
-                    predicted_age = "Neutral"
+                    predicted_age = 0
 
                 text = f"Age:{predicted_age} || Gender:{predicted_gender}"
                 cv2.putText(frame, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX,
