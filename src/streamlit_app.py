@@ -61,7 +61,9 @@ if st.session_state.run_loop:
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 4)
 
             try:
-                if age < 20:
+                if age == 0:
+                    age = "Neutral"
+                elif age < 20:
                     age = "below 20"
                 elif age > 60:
                     age = "above 60"
