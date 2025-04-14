@@ -13,6 +13,8 @@ display_header()
 # Initialize session
 if "run_loop" not in st.session_state:
     st.session_state.run_loop = False
+if "detection_log" not in st.session_state:
+    st.session_state.detection_log = []
 
 # Get sidebar config
 config = sidebar_config()
@@ -22,6 +24,7 @@ if config["run"]:
     st.session_state.run_loop = True
 
 frame_placeholder = st.empty()
+log_placeholder = st.empty()
 
 identify_age=config["identify_age"]
 identify_gender=config["identify_gender"]
@@ -73,11 +76,22 @@ if st.session_state.run_loop:
                 age = "Neutral"
 
             label = f"Age: {age} | Gender: {gender}"
+
+
             cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 3)
 
             person_id = result["visitorId"]
             if face_processor.tracker.check_for_api(person_id):
                 print(result)
+
+                # Add log entry
+                log_entry = f"Time: {result.get('visitTime', 'None')} | Age: {age} | Gender: {gender}"
+                st.session_state.detection_log.append(log_entry)
+
+                # Keep displaying all logs in scrollable text area
+                log_text = "\n".join(reversed(st.session_state.detection_log))  # latest on top
+                log_placeholder.text_area("Detection Log", value=log_text, height=300, key="log_text", disabled=True)
+                
                 if (identify_age and identify_gender):
                     topic = "aws_lab_default"
                     send_to_kafka(result, topics=[topic])
