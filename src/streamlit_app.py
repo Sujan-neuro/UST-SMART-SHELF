@@ -5,6 +5,7 @@ import streamlit as st
 from main import FaceProcessor
 from streamlit_utils import set_page_style, display_header, sidebar_config
 from kafka_producer import send_to_kafka
+from config import TOPICS
 
 
 set_page_style()
@@ -90,14 +91,12 @@ if st.session_state.run_loop:
 
                 # Keep displaying all logs in scrollable text area
                 log_text = "\n".join(reversed(st.session_state.detection_log))  # latest on top
-                log_placeholder.text_area("Detection Log", value=log_text, height=300, key="log_text", disabled=True)
-                
-                if (identify_age and identify_gender):
-                    topic = "aws_lab_default"
-                    send_to_kafka(result, topics=[topic])
-                elif (not identify_age and not identify_gender):
-                    topic = "aws_lab_no_detection"
-                    send_to_kafka(result, topics=[topic])
+                log_placeholder.text_area("Detection Log", value=log_text, height=300, disabled=True)
+                send_to_kafka(result, TOPICS)
+                # if (identify_age and identify_gender):
+                #     send_to_kafka(result, DETECTION_TOPICS)
+                # elif (not identify_age and not identify_gender):
+                #     send_to_kafka(result, NO_DETECTION_TOPICS)
 
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame_placeholder.image(frame_rgb, channels="RGB")
