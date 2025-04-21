@@ -100,10 +100,6 @@ if st.session_state.run_loop:
                     send_to_kafka(result, TOPICS)
                 except:
                     print('Unable to send the payload')
-                # if (identify_age and identify_gender):
-                #     send_to_kafka(result, DETECTION_TOPICS)
-                # elif (not identify_age and not identify_gender):
-                #     send_to_kafka(result, NO_DETECTION_TOPICS)
 
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame_placeholder.image(frame_rgb, channels="RGB")
