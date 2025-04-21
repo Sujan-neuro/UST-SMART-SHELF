@@ -18,8 +18,8 @@ MAX_EMBEDDING_TO_MATCH = 500
 STORE_LOCATION = get_current_location()
 
 # SCREEN LOCATION ID
-LOCATION_ID = "65e054c3368caa35f73ad2b4"
+LOCATION_ID = "Paste location id here"
 
 #KAFKA DETAILS
-TOPICS = ['lenovo_event']
-BOOTSTRAP_SERVERS='139.5.190.16:9092'
+TOPICS = ['Paste kafka topic here']
+BOOTSTRAP_SERVERS='Paste your secret server here'
