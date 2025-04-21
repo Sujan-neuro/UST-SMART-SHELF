@@ -45,7 +45,7 @@ class FaceProcessor:
             identify_gender=identify_gender
         )
         self.processor = Processor(self.detector, self.analyzer)
-        self.tracker = IDTracker(tracking_duration_sec=self.tracking_duration_sec)
+        self.tracker = IDTracker(self.tracking_duration_sec)
         self.last_save_time = time.time()
 
         # Set up the camera
