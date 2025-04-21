@@ -5,6 +5,7 @@ import streamlit as st
 from main import FaceProcessor
 from streamlit_utils import set_page_style, display_header, sidebar_config
 from kafka_producer import send_to_kafka
+from config import TOPICS
 
 
 set_page_style()
@@ -85,19 +86,20 @@ if st.session_state.run_loop:
                 print(result)
 
                 # Add log entry
-                log_entry = f"Time: {result.get('visitTime', 'None')} | Age: {age} | Gender: {gender}"
+                log_entry = f"Date: {result.get('visitDate', 'None')} | Time: {result.get('visitTime', 'None')} | Age: {age} | Gender: {gender}"
                 st.session_state.detection_log.append(log_entry)
 
                 # Keep displaying all logs in scrollable text area
                 log_text = "\n".join(reversed(st.session_state.detection_log))  # latest on top
-                log_placeholder.text_area("Detection Log", value=log_text, height=300, key="log_text", disabled=True)
-                
-                if (identify_age and identify_gender):
-                    topic = "aws_lab_default"
-                    send_to_kafka(result, topics=[topic])
-                elif (not identify_age and not identify_gender):
-                    topic = "aws_lab_no_detection"
-                    send_to_kafka(result, topics=[topic])
+                try:
+                    log_placeholder.text_area("Detection Log", value=log_text, height=300, disabled=True)
+                except:
+                    log_text = "Unable to process logging"
+                    log_placeholder.text_area("Detection Log", value=log_text, height=300, disabled=True)
+                try:
+                    send_to_kafka(result, TOPICS)
+                except:
+                    print('Unable to send the payload')
 
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame_placeholder.image(frame_rgb, channels="RGB")
