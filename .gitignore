@@ -178,3 +178,4 @@ yolov8m.pt
 results.json
 myenv/
 src/testing_kafka.py
+log.txt
