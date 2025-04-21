@@ -86,13 +86,20 @@ if st.session_state.run_loop:
                 print(result)
 
                 # Add log entry
-                log_entry = f"Time: {result.get('visitTime', 'None')} | Age: {age} | Gender: {gender}"
+                log_entry = f"Date: {result.get('visitDate', 'None')} | Time: {result.get('visitTime', 'None')} | Age: {age} | Gender: {gender}"
                 st.session_state.detection_log.append(log_entry)
 
                 # Keep displaying all logs in scrollable text area
                 log_text = "\n".join(reversed(st.session_state.detection_log))  # latest on top
-                log_placeholder.text_area("Detection Log", value=log_text, height=300, disabled=True)
-                send_to_kafka(result, TOPICS)
+                try:
+                    log_placeholder.text_area("Detection Log", value=log_text, height=300, disabled=True)
+                except:
+                    log_text = "Unable to process logging"
+                    log_placeholder.text_area("Detection Log", value=log_text, height=300, disabled=True)
+                try:
+                    send_to_kafka(result, TOPICS)
+                except:
+                    print('Unable to send the payload')
                 # if (identify_age and identify_gender):
                 #     send_to_kafka(result, DETECTION_TOPICS)
                 # elif (not identify_age and not identify_gender):
