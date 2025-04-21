@@ -16,6 +16,7 @@ flatbuffers==25.2.10
 fonttools==4.56.0
 fsspec==2025.2.0
 gast==0.6.0
+geocoder==1.38.1
 gdown==5.2.0
 google-pasta==0.2.0
 grpcio==1.70.0
@@ -56,6 +57,7 @@ Pygments==2.19.1
 pyparsing==3.2.1
 PySocks==1.7.1
 python-dateutil==2.9.0.post0
+python-kafka==2.0.3
 pytz==2025.1
 PyYAML==6.0.2
 regex==2024.11.6
@@ -68,6 +70,7 @@ scipy==1.15.2
 seaborn==0.13.2
 six==1.17.0
 soupsieve==2.6
+streamlit==1.44.1
 sympy==1.13.1
 tensorboard==2.18.0
 tensorboard-data-server==0.7.2
