@@ -1,7 +1,8 @@
-from utils import get_current_location
+from location.location import get_current_location
+STORE_LOCATION = get_current_location()
 
 # MODEL WEIGHTS
-AGE_DETECTOR_WEIGHTS = "./src/resnet50_regression.pth"
+AGE_DETECTOR_WEIGHTS = "./src/analysis/models/resnet50_regression.pth"
 GENDER_DETECTOR = "rizvandwiki/gender-classification"
 
 # DETAILED CONFIGURABLE ITEMS
@@ -15,11 +16,9 @@ PROCESS_INTERVAL_SEC = 2
 TRACKING_DURATION_SEC = 3
 MAX_EMBEDDING_TO_MATCH = 500
 
-STORE_LOCATION = get_current_location()
-
 # SCREEN LOCATION ID
-LOCATION_ID = "Paste location id here"
+LOCATION_ID = "..."
 
 #KAFKA DETAILS
-TOPICS = ['Paste kafka topic here']
-BOOTSTRAP_SERVERS='Paste your secret server here'
+TOPICS = ["..."]
+BOOTSTRAP_SERVERS="..."
