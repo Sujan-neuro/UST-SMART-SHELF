@@ -177,5 +177,10 @@ env
 yolov8m.pt 
 results.json
 myenv/
-src/testing_kafka.py
+src/kafka_functions/kafka_testing.py
 log.txt
+src/analysis/models/gender-classification
+rough.py
+src/analysis/download_and_cache_model.py
+rough.ipynb
+log/

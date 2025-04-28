@@ -1,10 +1,14 @@
-# demo consumer to consume messages from Kafka topics
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+#  demo consumer to consume messages from Kafka topics
 from confluent_kafka import Consumer, KafkaException
+from configs .config import BOOTSTRAP_SERVERS
 
 # Kafka Configuration
 conf = {
-    'bootstrap.servers': '139.5.190.16:9092',
+    'bootstrap.servers': BOOTSTRAP_SERVERS,
     'group.id': f'Retail_Media_group',
     'auto.offset.reset': 'earliest',  # Start reading from the beginning if no committed offset
     'enable.auto.commit': True,  # Automatically commit offsets
@@ -16,7 +20,7 @@ conf = {
 consumer = Consumer(conf)
 
 # List of Topics to Subscribe
-topics = ['lenovo_event', 'retailmedia', 'malaysia_event', 'footprints_lab', 'nrf_singapore']
+topics = ['lenovo_event', 'retailmedia', 'malaysia_event', 'footprints_lab', 'nrf_singapore', 'aws_lab_default']
 consumer.subscribe(topics)
 
 print(f"Subscribed to topics: {topics}")
