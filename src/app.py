@@ -3,12 +3,14 @@ import os
 os.environ["STREAMLIT_SERVER_FILE_WATCHER_TYPE"] = "none"
 
 import cv2
-import streamlit as st
 import logging
 import traceback
+import streamlit as st
 
-from faceprocessor import FaceProcessor
+from configs.utils import LoopAd
 from configs.config import TOPICS
+from log_utils.logs import LogHandler
+from faceprocessor import FaceProcessor
 from kafka_functions.kafka_producer import send_to_kafka
 from streamlit_files.streamlit_utils import set_page_style, display_header, sidebar_config
 
@@ -20,9 +22,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
-from log_utils.logs import LogHandler
 log_handler = LogHandler()
+loopad = LoopAd()
 
 
 def initialize_session_state() -> None:
@@ -113,6 +114,7 @@ def process_stream(face_processor: FaceProcessor, config: dict, frame_placeholde
                 age = format_age(result.get("age", 0))
                 gender = result.get("gender", "Neutral")
                 draw_bbox_with_label(frame, bbox, age, gender)
+                result = loopad.assign_age(result)
 
                 person_id = result.get("visitorId")
                 if face_processor.tracker.check_for_api(person_id):

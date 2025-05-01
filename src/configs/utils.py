@@ -1,5 +1,6 @@
 import time
 import logging
+from typing import Dict, Any
 
 
 # Setup logger
@@ -83,7 +84,47 @@ class IDTracker:
         except Exception as e:
             logger.error(f"IDTracker.check_for_api encountered an error: {e}")
             return False
-        
+
+
+class LoopAd:
+    """
+    A class to toggle age between 25 and 45 every 11 seconds
+    if gender is None or 'Neutral'.
+    """
+
+    def __init__(self):
+        self.previous_time = time.time()
+        self.previous_age = 45
+
+    def assign_age(self, result: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Toggle result['age'] between 25 and 45 every 11 seconds.
+
+        Args:
+            result (Dict[str, Any]): The dictionary to update with age.
+
+        Returns:
+            None
+        """
+        try:
+            gender = result.get("gender", "Neutral")
+            current_time = time.time()
+
+            if not gender or gender == "Neutral":
+                if current_time - self.previous_time >= 11:
+                    # Toggle age
+                    new_age = 25 if self.previous_age == 45 else 45
+                    result['age'] = new_age
+                    result['gender'] = 'Male'
+                    self.previous_age = new_age
+                    self.previous_time = current_time
+                else:
+                    result['age'] = self.previous_age
+                    result['gender'] = 'Male'
+            return result
+        except Exception as e:
+            print(f"Error in assign_age: {e}")
+            return result
 
 # class IDTracker:
 #     def __init__(self, tracking_duration_sec = 3):
