@@ -19,6 +19,23 @@ MAX_EMBEDDING_TO_MATCH = 500
 # SCREEN LOCATION ID
 LOCATION_ID = "..."
 
-#KAFKA DETAILS
+# API CONFIGURATION
+BASE_URL = "https://demo.personalisationhub.com"  # Change this line
+API_KEY = "dISlwI3whWXjgKY31Naz2Z7qkIwpdPia5pyHVtBzPg04ZijOkMCM3nnc35voCBqYXPPhjEOpr0asmIYWsiFWyIFMp0SRAj0DjtG8Jfj1qjhodOFKIIX6b0yRZZzEtDF1"        # Change this line
+# API PAYLOAD CONFIGURATION
+DEFAULT_DEVICE_TYPE = ""
+DEFAULT_EVENTS = ["sales"]
+DEFAULT_COMPANY_NAME = "UST"
+
+# Configurable parameters (can be modified as needed)
+PURCHASE_INTENT = "electronics"  # Purchase intent from config
+VISITOR_SEGMENTS = ["female"]  # Visitor segments from config
+
+# Display targeting options (choose one approach)
+DISPLAY_IDS = [923]  # Display IDs from config - for single/multiple display targeting
+STORE_UUID = "UST-001"    # For all store displays targeting
+STORE_UUID_TYPE = "STORE_CODE"
+
+#KAFKA DETAILS (DEPRECATED - keeping for reference)
 TOPICS = ["..."]
 BOOTSTRAP_SERVERS="..."

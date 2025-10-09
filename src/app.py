@@ -8,9 +8,18 @@ import logging
 import traceback
 
 from faceprocessor import FaceProcessor
-from configs.config import TOPICS
-from kafka_functions.kafka_producer import send_to_kafka
 from streamlit_files.streamlit_utils import set_page_style, display_header, sidebar_config
+from configs.config import (
+    BASE_URL, API_KEY,
+    DEFAULT_DEVICE_TYPE, DEFAULT_EVENTS, DEFAULT_COMPANY_NAME,
+    DISPLAY_IDS, STORE_UUID, STORE_UUID_TYPE,
+    PURCHASE_INTENT, VISITOR_SEGMENTS
+)
+from api_functions.ph_adapter import send_visitor_data_to_api
+
+# Legacy Kafka imports (deprecated)
+# from configs.config import TOPICS
+# from kafka_functions.kafka_producer import send_to_kafka
 
 # Setup logger
 logging.basicConfig(
@@ -134,19 +143,43 @@ def process_stream(face_processor: FaceProcessor, config: dict, frame_placeholde
                     update_detection_log(log_entry, log_placeholder)
                     logger.info(log_entry)
                     try:
-                        send_to_kafka(result, TOPICS)
-                        log_entry = f"If you do not see the ad, it may either be currently playing or there could be an issue with the display or kafka server."
-                        update_detection_log(log_entry, log_placeholder)
-                        log_handler.store_log(f"Payload: {result}")
-                        logger.info(log_entry)
-                        log_entry = f"_____________________Transaction Successful__________________"
-                        update_detection_log(log_entry, log_placeholder)
+                        # Send visitor data to API instead of Kafka
+                        success = send_visitor_data_to_api(
+                            result,
+                            base_url=BASE_URL,
+                            apikey=API_KEY,
+                            device_type=DEFAULT_DEVICE_TYPE,
+                            events=DEFAULT_EVENTS,
+                            company_name=DEFAULT_COMPANY_NAME,
+                            display_ids=DISPLAY_IDS,
+                            store_uuid=STORE_UUID,
+                            store_uuid_type=STORE_UUID_TYPE,
+                            purchase_intent=PURCHASE_INTENT,
+                            visitor_segments=VISITOR_SEGMENTS,
+                            use_all_store_displays=False,  # Set to False to use specific display_ids instead
+                            timeout=5.0
+                        )
+                        
+                        if success:
+                            log_entry = f"Visitor data successfully sent to API. If you do not see the ad, it may either be currently playing or there could be an issue with the display."
+                            update_detection_log(log_entry, log_placeholder)
+                            log_handler.store_log(f"API Payload: {result}")
+                            logger.info(log_entry)
+                            log_entry = f"_____________________API Transaction Successful__________________"
+                            update_detection_log(log_entry, log_placeholder)
+                        else:
+                            log_entry = f"Failed to send visitor data to API."
+                            update_detection_log(log_entry, log_placeholder)
+                            logger.warning(log_entry)
+                            log_entry = f"________________________API Transaction Failed____________________"
+                            update_detection_log(log_entry, log_placeholder)
+                            
                     except Exception as e:
-                        logger.warning(f"Unable to send payload to Kafka: {e}", exc_info = True)
-                        log_entry = f"Issue with kafka, unable to send the payload to kafka."
+                        logger.warning(f"Unable to send payload to API: {e}", exc_info=True)
+                        log_entry = f"Issue with API, unable to send the payload to API."
                         update_detection_log(log_entry, log_placeholder)
                         logger.warning(log_entry)
-                        log_entry = f"________________________Transaction Failed____________________"
+                        log_entry = f"________________________API Transaction Failed____________________"
                         update_detection_log(log_entry, log_placeholder)
 
             frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
