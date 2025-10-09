@@ -184,3 +184,10 @@ rough.py
 src/analysis/download_and_cache_model.py
 rough.ipynb
 log/
+ustenv311
+LOCAL_TESTING_GUIDE.md
+run_tests.py
+test_api_integration.py
+test_mock_api_server.py
+src/configs/test_config.py
+ustenv
