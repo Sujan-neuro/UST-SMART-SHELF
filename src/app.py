@@ -1,11 +1,12 @@
 import os
-# ── Disable Streamlit’s file‐watcher to avoid torch.classes introspection errors
+# ── Disable Streamlit's file‐watcher to avoid torch.classes introspection errors
 os.environ["STREAMLIT_SERVER_FILE_WATCHER_TYPE"] = "none"
 
 import cv2
 import streamlit as st
 import logging
 import traceback
+import random
 
 from faceprocessor import FaceProcessor
 from streamlit_files.streamlit_utils import set_page_style, display_header, sidebar_config
@@ -143,13 +144,26 @@ def process_stream(face_processor: FaceProcessor, config: dict, frame_placeholde
                     update_detection_log(log_entry, log_placeholder)
                     logger.info(log_entry)
                     try:
+                        # Determine events based on gender and age availability
+                        # Get raw age and gender from result (before formatting)
+                        raw_age = result.get("age", 0)
+                        raw_gender = result.get("gender", "Neutral")
+                        
+                        # If both gender and age are present (not default values), use empty string
+                        # Otherwise, randomly select one value from DEFAULT_EVENTS
+                        if raw_age > 0 and raw_gender != "Neutral":
+                            events_to_send = [""]
+                        else:
+                            # Randomly select one value from DEFAULT_EVENTS if available
+                            events_to_send = [random.choice(DEFAULT_EVENTS)] if DEFAULT_EVENTS else [""]
+                        
                         # Send visitor data to API instead of Kafka
                         success = send_visitor_data_to_api(
                             result,
                             base_url=BASE_URL,
                             apikey=API_KEY,
                             device_type=DEFAULT_DEVICE_TYPE,
-                            events=DEFAULT_EVENTS,
+                            events=events_to_send,
                             company_name=DEFAULT_COMPANY_NAME,
                             display_ids=DISPLAY_IDS,
                             store_uuid=STORE_UUID,
